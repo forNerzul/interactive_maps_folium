@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/database.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -28,6 +28,25 @@ class Emprendimientos(db.Model):
     youtube = db.Column(db.String(120), nullable=True)
     linkedin = db.Column(db.String(120), nullable=True)
     imagen = db.Column(db.String(120), nullable=True)
+
+# Object to database
+class Emprendimiento(object):
+    def __init__(self, nombre, descripcion, direccion, telefono, email, web, facebook, instagram, twitter, youtube, linkedin, imagen):
+        self.nombre = nombre
+        self.descripcion = descripcion
+        self.direccion = direccion
+        self.telefono = telefono
+        self.email = email
+        self.web = web
+        self.facebook = facebook
+        self.instagram = instagram
+        self.twitter = twitter
+        self.youtube = youtube
+        self.linkedin = linkedin
+        self.imagen = imagen
+
+    def __repr__(self):
+        return '<Emprendimiento %r>' % self.nombre
 
 @app.route("/")
 def index():
@@ -85,10 +104,19 @@ def crear_emprendimiento():
         linkedin = request.form['linkedin']
         imagen = request.form['imagen']
 
-        db.session.add(Emprendimientos(nombre=nombre, descripcion=descripcion, direccion=direccion, telefono=telefono, email=email, web=web, facebook=facebook, instagram=instagram, twitter=twitter, youtube=youtube, linkedin=linkedin, imagen=imagen))
+        emprendimiento = Emprendimiento(nombre, descripcion, direccion, telefono, email, web, facebook, instagram, twitter, youtube, linkedin, imagen)
+
+        db.session.add(emprendimiento)
         db.session.commit()
 
-        return redirect(url_for('index.html'))
+        return redirect(url_for('index'))
+
+@app.route("/listar_emprendimientos")
+def listar_emprendimientos():
+    emprendimientos = Emprendimientos.query.all()
+    print(emprendimientos[0].nombre)
+    return render_template('listar_emprendimientos.html', emprendimientos=emprendimientos)
 
 if __name__ == "__main__":
+    db.create_all()
     app.run(debug=True)
