@@ -21,7 +21,7 @@ def index():
     # add marker to map
     folium.Marker(  
         coords["coor_1"],
-        popup="<h1>Heladeria El Helado Feliz</h1> <img src='static/img/heladin.jpeg' width='250px'> <p>Abiertos desde 1806, cerrados cuando hay luna llena, pioneros en ingenieria heladil</p> <p><button type=\"button\" class=\"btn btn-success\"><i class=\"fa-whatsapp\">WhatsApp</i></button></p>", 
+        popup='<h1>Heladeria El Helado Feliz</h1> <img src="static/img/heladin.jpeg" width="250px"> <p>Abiertos desde 1806, cerrados cuando hay luna llena, pioneros en ingenieria heladil</p> <p><a class="btn btn-success" href="#"><i class="fa fa-whatsapp"> WhatsApp</i></a></p>', 
         tooltip="Helados recalentados en microondas, una propuesta ideal para descontracturarse.",
         icon=folium.Icon(prefix='glyphicon',icon='home', icon_color='white', color='orange')
     ).add_to(mapita)
@@ -29,7 +29,7 @@ def index():
     # add another marker to map whith custom icon
     folium.Marker(  
         coords["coor_2"],
-        popup="<h1>Penguin House 2.0</h1> <img src='static/img/penguin_house.jpeg' width='250px'> <p>Si tu codigo no se rompio, algo estas haciendo mal kp.</p>", 
+        popup='<h1>Penguin House 2.0</h1> <img src="static/img/penguin_house.jpeg" width="250px"> <p>Si tu codigo no se rompio, algo estas haciendo mal kp.</p><p><a class="btn btn-success" href="#"><i class="fa fa-whatsapp"> WhatsApp</i></a></p>', 
         tooltip="Retiro Espiritual para programadores, creemos en el moustro de spaghetti volador",
         icon=penguIcon
     ).add_to(mapita)
