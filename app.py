@@ -1,7 +1,33 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 import folium
 
+# starting with sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
+
+
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/database.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# Database model
+
+class Emprendimientos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(80), nullable=False)
+    descripcion = db.Column(db.String(120), nullable=False)
+    direccion = db.Column(db.String(120), nullable=False)
+    telefono = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=True)
+    web = db.Column(db.String(120), nullable=True)
+    facebook = db.Column(db.String(120), nullable=True)
+    instagram = db.Column(db.String(120), nullable=True)
+    twitter = db.Column(db.String(120), nullable=True)
+    youtube = db.Column(db.String(120), nullable=True)
+    linkedin = db.Column(db.String(120), nullable=True)
+    imagen = db.Column(db.String(120), nullable=True)
 
 @app.route("/")
 def index():
@@ -42,6 +68,27 @@ def index():
 @app.route("/mapa")
 def mapa():
     return render_template('map.html')
+
+@app.route("/crear_emprendimiento", methods=['GET', 'POST'])
+def crear_emprendimiento():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        direccion = request.form['direccion']
+        telefono = request.form['telefono']
+        email = request.form['email']
+        web = request.form['web']
+        facebook = request.form['facebook']
+        instagram = request.form['instagram']
+        twitter = request.form['twitter']
+        youtube = request.form['youtube']
+        linkedin = request.form['linkedin']
+        imagen = request.form['imagen']
+
+        db.session.add(Emprendimientos(nombre=nombre, descripcion=descripcion, direccion=direccion, telefono=telefono, email=email, web=web, facebook=facebook, instagram=instagram, twitter=twitter, youtube=youtube, linkedin=linkedin, imagen=imagen))
+        db.session.commit()
+
+        return redirect(url_for('index.html'))
 
 if __name__ == "__main__":
     app.run(debug=True)
